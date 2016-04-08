@@ -1,21 +1,23 @@
 package com.github.zhangkaitao.shiro.chapter2;
 
-import junit.framework.Assert;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
-import org.apache.shiro.authz.ModularRealmAuthorizer;
 import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.mgt.SessionsSecurityManager;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Destroyable;
 import org.apache.shiro.util.Factory;
 import org.apache.shiro.util.ThreadContext;
 import org.junit.After;
 import org.junit.Test;
+
+import junit.framework.Assert;
 
 
 /**
@@ -33,9 +35,10 @@ public class AuthenticatorTest {
         //得到一个身份集合，其包含了Realm验证成功的身份信息
         PrincipalCollection principalCollection = subject.getPrincipals();
         Assert.assertEquals(2, principalCollection.asList().size());
+        //System.out.println(principalCollection.asList().size());
     }
 
-    @Test(expected = UnknownAccountException.class)
+    @Test
     public void testAllSuccessfulStrategyWithFail() {
         login("classpath:shiro-authenticator-all-fail.ini");
     }
@@ -48,6 +51,15 @@ public class AuthenticatorTest {
         //得到一个身份集合，其包含了Realm验证成功的身份信息
         PrincipalCollection principalCollection = subject.getPrincipals();
         Assert.assertEquals(2, principalCollection.asList().size());
+        System.out.println(principalCollection.asList().size());
+        
+        List<?> list = principalCollection.asList();
+        
+        Iterator<?> iter = list.iterator();
+        while(iter.hasNext()){
+        	Object obj = iter.next();
+        	System.out.println(obj.toString()+obj.getClass());
+        }
     }
 
     @Test
@@ -58,6 +70,7 @@ public class AuthenticatorTest {
         //得到一个身份集合，其包含了第一个Realm验证成功的身份信息
         PrincipalCollection principalCollection = subject.getPrincipals();
         Assert.assertEquals(1, principalCollection.asList().size());
+        System.out.println(principalCollection.asList().size());
     }
 
     @Test
